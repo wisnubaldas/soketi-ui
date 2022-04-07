@@ -33,4 +33,6 @@ Route::post('/apps/{id}/regenerate-credentials', [Controllers\AppsController::cl
 Route::post('/apps/{id}/save', [Controllers\AppsController::class, 'save'])->middleware(['auth']);
 Route::post('/apps/{id}/debug/clear', [Controllers\AppsController::class, 'debugClear'])->middleware(['auth']);
 
+Route::get('/users', [Controllers\UserController::class, 'index'])->middleware(['auth']);
+
 Route::webhooks('webhooks');
