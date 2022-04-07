@@ -1,7 +1,10 @@
 <script>
+    import { page as inertiaPage } from '@inertiajs/inertia-svelte'
+
     import AppsIcon from 'svelte-icons/io/IoIosApps.svelte'
     import MoreIcon from 'svelte-icons/md/MdMoreVert.svelte'
     import BackArrow from 'svelte-icons/io/IoMdArrowRoundBack.svelte'
+    import FaUser from 'svelte-icons/fa/FaUser.svelte'
     import Padlock from 'svelte-icons/md/MdLock.svelte'
     import Limits from 'svelte-icons/fa/FaSlidersH.svelte'
     import HookIcon from 'svelte-icons/gi/GiMeatHook.svelte'
@@ -12,16 +15,19 @@
     export let appId;
     export let appTitle;
 
+    const user = $inertiaPage.props.user;
+
     const navItems = {
       default: [
-        {id: "apps", title: "Apps", path: "/apps", icon: AppsIcon},
+        {id: "apps", permission: "standard", title: "Apps", path: "/apps", icon: AppsIcon},
+        {id: "users", permission: "admin", title: "Users", path: "/users", icon: FaUser},
       ],
       apps: [
-        {id: "back", title: "Back To Apps", path: "/apps", icon: BackArrow},
-        {id: "credentials", title: "Credentials", path: "/apps/"+appId+"/credentials", icon: Padlock},
-        {id: "limits", title: "Limits", path: "/apps/"+appId+"/limits", icon: Limits},
-        {id: "webhooks", title: "Webhooks", path: "/apps/"+appId+"/webhooks", icon: HookIcon},
-        {id: "debug", title: "Debug", path: "/apps/"+appId+"/debug", icon: DebugIcon},
+        {id: "back", permission: "standard", title: "Back To Apps", path: "/apps", icon: BackArrow},
+        {id: "credentials", permission: "standard", title: "Credentials", path: "/apps/"+appId+"/credentials", icon: Padlock},
+        {id: "limits", permission: "standard", title: "Limits", path: "/apps/"+appId+"/limits", icon: Limits},
+        {id: "webhooks", permission: "standard", title: "Webhooks", path: "/apps/"+appId+"/webhooks", icon: HookIcon},
+        {id: "debug", permission: "standard", title: "Debug", path: "/apps/"+appId+"/debug", icon: DebugIcon},
       ],
     };
 
@@ -77,12 +83,14 @@
         <div class="mt-5 flex-grow flex flex-col">
           <nav class="flex-1 px-2 pb-4 space-y-1">
             {#each navItems[items] as navItem}
+            {#if user.permissions.includes(navItem.permission)}
             <a href="{navItem.path}" class="{page == navItem.id ? "bg-gray-100 text-gray-900" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"} group flex items-center px-2 py-2 text-sm font-medium rounded-md">
               <div class="{page == navItem.id ? "text-gray-500" : "text-gray-400 group-hover:text-gray-500"} mr-3 flex-shrink-0 h-8 w-8" >
                 <svelte:component this={navItem.icon}/>
               </div>
               {navItem.title}
             </a>
+            {/if}
             {/each}
           </nav>
         </div>
