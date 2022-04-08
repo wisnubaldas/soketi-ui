@@ -34,5 +34,6 @@ Route::post('/apps/{id}/save', [Controllers\AppsController::class, 'save'])->mid
 Route::post('/apps/{id}/debug/clear', [Controllers\AppsController::class, 'debugClear'])->middleware(['auth']);
 
 Route::get('/users', [Controllers\UserController::class, 'index'])->middleware(['auth']);
+Route::post('/users', [Controllers\UserController::class, 'save'])->middleware(['auth']);
 
 Route::webhooks('webhooks');

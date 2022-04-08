@@ -1,12 +1,19 @@
 <script>
     import Dashboard from "../../../Components/Layouts/Dashboard.svelte"
+    import UserModal from "../../../Components/Inputs/UserModal.svelte"
 
     export let users;
+
+    let activeUser = false;
 </script>
 
 <svelte:head>
   <title>Users | Soketi UI</title>
 </svelte:head>
+
+{#if activeUser !== false}
+<UserModal bind:user={activeUser} />
+{/if}
 
 <Dashboard items="default" page="users">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pb-4">
@@ -36,7 +43,7 @@
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{user.email}</td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{user.permissions}</td>
                             <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                              <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only">, {user.name}</span></a>
+                              <p on:click={() => activeUser = user} class="cursor-pointer inline-block text-indigo-600 hover:text-indigo-900">Edit</p>
                             </td>
                           </tr>
                           {/each}

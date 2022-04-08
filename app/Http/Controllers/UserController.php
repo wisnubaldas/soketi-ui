@@ -15,9 +15,43 @@ class UserController extends Controller
 
         $users = User::all()->map(function ($user) {
             return [
+                'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'permissions' => collect($user->permissions)->map(fn($p) => ' ' . ucfirst($p)),
+                'permissions' => $user->permissions,
+            ];
+        });
+
+        return Inertia::render('Dashboard/Users/Index', [
+            'users' => $users,
+        ]);
+    }
+
+    public function save(Request $request)
+    {
+        $this->authorize('admin');
+
+        $user = User::find($request->id);
+
+        if ($user === null) {
+            $user = new User;
+            $user->password = '';
+        }
+
+        $user->fill([
+            'name' => $request->name,
+            'email' => $request->email,
+            'permissions' => $request->permissions,
+        ]);
+
+        $user->save();
+
+        $users = User::all()->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'permissions' => $user->permissions,
             ];
         });
 
